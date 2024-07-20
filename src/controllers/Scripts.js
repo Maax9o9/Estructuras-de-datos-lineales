@@ -99,6 +99,13 @@ let linkedListTimes = {
     'Radix Sort': 0
 };
 
+let iterationTimes = {
+    'Bubble Sort': { Array: 0, LinkedList: 0 },
+    'Merge Sort': { Array: 0, LinkedList: 0 },
+    'Radix Sort': { Array: 0, LinkedList: 0 }
+};
+
+
 function updateChart(sortName, time, dataType) {
     if (dataType === 'Array') {
         arrayTimes[sortName] = time;
@@ -158,6 +165,39 @@ const linkedListChart = new Chart(linkedListChartCtx, {
     }
 });
 
+
+const iterationChartCtx = document.getElementById('iterationChart').getContext('2d');
+
+const iterationChart = new Chart(iterationChartCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Bubble Sort', 'Merge Sort', 'Radix Sort'],
+        datasets: [
+            {
+                label: 'Tiempos de Iteración (Array)',
+                data: Object.values(iterationTimes).map(item => item.Array),
+                backgroundColor: ['rgba(255, 206, 86, 0.2)'],
+                borderColor: ['rgba(255, 206, 86, 1)'],
+                borderWidth: 1
+            },
+            {
+                label: 'Tiempos de Iteración (LinkedList)',
+                data: Object.values(iterationTimes).map(item => item.LinkedList),
+                backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+                borderColor: ['rgba(75, 192, 192, 1)'],
+                borderWidth: 1
+            }
+        ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
 document.getElementById('sortBubble').addEventListener('click', function() {
     console.log("Antes de bubbleSort para array:", businesses);
     let dataCopy = [...businesses].filter(business => business && business.business); 
@@ -177,6 +217,10 @@ document.getElementById('sortBubble').addEventListener('click', function() {
     let timeLinkedList = (endTimeLinkedList - startTimeLinkedList) / 1000;
     console.log("Después de bubbleSort para LinkedList:", linkedList.toArray());
     displaySortTime('Bubble Sort', timeLinkedList, 'LinkedList');
+
+    iterationTimes['Bubble Sort'].Array = timeArray;
+    iterationTimes['Bubble Sort'].LinkedList = timeLinkedList;
+    updateIterationChart();
 });
 
 document.getElementById('sortMerge').addEventListener('click', function() {
@@ -198,6 +242,10 @@ document.getElementById('sortMerge').addEventListener('click', function() {
     let timeLinkedList = (endTimeLinkedList - startTimeLinkedList) / 1000;
     console.log("Después de mergeSort para LinkedList:", linkedList.toArray());
     displaySortTime('Merge Sort', timeLinkedList, 'LinkedList');
+
+    iterationTimes['Merge Sort'].Array = timeArray;
+    iterationTimes['Merge Sort'].LinkedList = timeLinkedList;
+    updateIterationChart();
 });
 
 document.getElementById('sortRadix').addEventListener('click', function() {
@@ -218,4 +266,25 @@ document.getElementById('sortRadix').addEventListener('click', function() {
     let timeLinkedList = (endTimeLinkedList - startTimeLinkedList) / 1000;
     console.log("Después de radixSort para LinkedList:", linkedList.toArray());
     displaySortTime('Radix Sort', timeLinkedList, 'LinkedList');
+
+    iterationTimes['Radix Sort'].Array = timeArray;
+    iterationTimes['Radix Sort'].LinkedList = timeLinkedList;
+    updateIterationChart();
 });
+
+function updateIterationChart() {
+    iterationChart.data.datasets[0].data = Object.values(iterationTimes).map(item => item.Array);
+    iterationChart.data.datasets[1].data = Object.values(iterationTimes).map(item => item.LinkedList);
+
+    iterationChart.update();
+}
+
+document.getElementById('search').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const filteredBusinesses = businesses.filter(business => business.business.toLowerCase().includes(searchTerm));
+    displayBusinesses(filteredBusinesses);
+});
+
+
+
+
