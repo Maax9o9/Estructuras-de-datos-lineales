@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Directory</title>
+</head>
+<body>
+    <h1>Business Directory</h1>
+    <input type="text" id="search" placeholder="Buscar empresa...">
+    <button onclick="searchBusiness()">Buscar</button>
+    <button id="sortBubble">Ordenar por Bubble Sort</button>
+    <button id="sortMerge">Ordenar por Merge Sort</button>
+    <button id="sortRadix">Ordenar por Radix Sort</button>
+    <div id="results"></div>
+    <div id="timingResults"></div>
+
+    <script type="module" src="controllers/Array.js"></script>
+    <script type="module" src="controllers/LinkedList.js"></script>
+    <script type="module" src="controllers/Business.js"></script>
+    <script type="module" src="controllers/Scripts.js"></script>
+</body>
+</html>
