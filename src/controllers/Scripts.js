@@ -200,7 +200,6 @@ document.getElementById('sortMerge').addEventListener('click', function() {
     displaySortTime('Merge Sort', timeLinkedList, 'LinkedList');
 });
 
-
 document.getElementById('sortRadix').addEventListener('click', function() {
     console.log("Antes de radixSort para array:", businesses);
     let dataCopy = [...businesses].filter(business => business && business.business);
