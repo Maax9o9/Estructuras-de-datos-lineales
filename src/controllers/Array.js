@@ -113,5 +113,14 @@ export function radixSort(array) {
     return array;
 }
 
+function searchByIdInArray(array, id) {
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] && array[i].business === id) {
+            return array[i];
+        }
+    }
+    return null;
+}
+
 
 

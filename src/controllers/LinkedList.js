@@ -23,6 +23,17 @@ export class LinkedList {
         }
     }
 
+    findByBusiness(businessId) {
+        let current = this.head;
+        while (current !== null) {
+            if (current.data.business === businessId) {
+                return current.data;
+            }
+            current = current.next;
+        }
+        return null;
+    }
+
     toArray() {
         const array = [];
         let current = this.head;
@@ -200,7 +211,6 @@ export class LinkedList {
     }
     
     
-    
     countingSort(exp) {
         let numIterations = 0;
         const size = this.size(); // Tamaño de la lista enlazada
@@ -262,5 +272,16 @@ export class LinkedList {
             current = current.next;
         }
         return count;
+    }
+
+    searchById(id) {
+        let current = this.head;
+        while (current !== null) {
+            if (current.data && current.data.business === id) {
+                return current.data;
+            }
+            current = current.next;
+        }
+        return null;
     }
 }
