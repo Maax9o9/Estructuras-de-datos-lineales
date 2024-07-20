@@ -31,8 +31,8 @@ function loadDataset() {
             }
 
             businesses = data
-                .filter(item => item && item.business)
-                .slice(0, 50000) // Limitar a 10000 elementos
+                .filter(item => item && typeof item === 'object' && 'business' in item) // Filtramos objetos válidos
+                .slice(0, 10000) 
                 .map(item => new Business(item));
 
             console.log("Datos después de cargar y filtrar:", businesses);
@@ -52,7 +52,6 @@ function loadDataset() {
             console.error('Error al cargar el dataset:', error);
         });
 }
-
 
 
 function displayBusinesses(businesses) {
@@ -84,11 +83,84 @@ function displaySortTime(sortName, time, dataType) {
     } else {
         console.error('El contenedor para los tiempos de ordenación no se encontró.');
     }
+
+    updateChart(sortName, time, dataType);
 }
+
+let arrayTimes = {
+    'Bubble Sort': 0,
+    'Merge Sort': 0,
+    'Radix Sort': 0
+};
+
+let linkedListTimes = {
+    'Bubble Sort': 0,
+    'Merge Sort': 0,
+    'Radix Sort': 0
+};
+
+function updateChart(sortName, time, dataType) {
+    if (dataType === 'Array') {
+        arrayTimes[sortName] = time;
+    } else if (dataType === 'LinkedList') {
+        linkedListTimes[sortName] = time;
+    }
+
+    arrayChart.data.datasets[0].data = Object.values(arrayTimes);
+    linkedListChart.data.datasets[0].data = Object.values(linkedListTimes);
+
+    arrayChart.update();
+    linkedListChart.update();
+}
+
+const arrayChartCtx = document.getElementById('arrayChart').getContext('2d');
+const linkedListChartCtx = document.getElementById('linkedListChart').getContext('2d');
+
+const arrayChart = new Chart(arrayChartCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Bubble Sort', 'Merge Sort', 'Radix Sort'],
+        datasets: [{
+            label: 'Tiempos de Ordenamiento (Array)',
+            data: Object.values(arrayTimes),
+            backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+            borderColor: ['rgba(255, 99, 132, 1)'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+const linkedListChart = new Chart(linkedListChartCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Bubble Sort', 'Merge Sort', 'Radix Sort'],
+        datasets: [{
+            label: 'Tiempos de Ordenamiento (LinkedList)',
+            data: Object.values(linkedListTimes),
+            backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+            borderColor: ['rgba(54, 162, 235, 1)'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
 
 document.getElementById('sortBubble').addEventListener('click', function() {
     console.log("Antes de bubbleSort para array:", businesses);
-    let dataCopy = [...businesses].filter(business => business != null && business.business);
+    let dataCopy = [...businesses].filter(business => business && business.business); 
     let startTimeArray = performance.now();
     let sortedArray = bubbleSortArray(dataCopy);
     let endTimeArray = performance.now();
@@ -109,7 +181,7 @@ document.getElementById('sortBubble').addEventListener('click', function() {
 
 document.getElementById('sortMerge').addEventListener('click', function() {
     console.log("Antes de mergeSort para array:", businesses);
-    let dataCopy = [...businesses].filter(business => business != null && business.business);
+    let dataCopy = [...businesses].filter(business => business && business.business); 
     let startTimeArray = performance.now();
     let sortedArray = mergeSort(dataCopy);
     let endTimeArray = performance.now();
@@ -129,12 +201,9 @@ document.getElementById('sortMerge').addEventListener('click', function() {
 });
 
 
-
-
 document.getElementById('sortRadix').addEventListener('click', function() {
-    // Ordenar el Array
     console.log("Antes de radixSort para array:", businesses);
-    let dataCopy = [...businesses].filter(business => business && business.business); 
+    let dataCopy = [...businesses].filter(business => business && business.business);
     let startTimeArray = performance.now();
     let radixSortedArray = radixSort(dataCopy);
     let endTimeArray = performance.now();
@@ -143,7 +212,6 @@ document.getElementById('sortRadix').addEventListener('click', function() {
     displayBusinesses(radixSortedArray);
     displaySortTime('Radix Sort', timeArray, 'Array');
 
-    // Ordenar la LinkedList
     console.log("Antes de radixSort para LinkedList:", linkedList.toArray());
     let startTimeLinkedList = performance.now();
     linkedList.radixSort();
@@ -152,4 +220,3 @@ document.getElementById('sortRadix').addEventListener('click', function() {
     console.log("Después de radixSort para LinkedList:", linkedList.toArray());
     displaySortTime('Radix Sort', timeLinkedList, 'LinkedList');
 });
-

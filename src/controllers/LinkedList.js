@@ -37,21 +37,41 @@ export class LinkedList {
         let swapped;
         let current;
         let end = null;
+    
+        // Repetir mientras haya intercambios
         do {
             swapped = false;
             current = this.head;
+    
+            // Iterar sobre la lista hasta el nodo `end`
             while (current.next !== end) {
-                if (current.data.business > current.next.data.business) {
-                    [current.data, current.next.data] = [current.next.data, current.data];
-                    swapped = true;
+                // Verificar si ambos nodos tienen datos válidos y la propiedad `business`
+                if (current.data && current.next.data &&
+                    current.data.business && current.next.data.business) {
+    
+                    // Comparar y realizar intercambio si es necesario
+                    if (current.data.business > current.next.data.business) {
+                        // Intercambiar los datos de los nodos
+                        const temp = current.data;
+                        current.data = current.next.data;
+                        current.next.data = temp;
+                        swapped = true;
+                    }
+                } else {
+                    // Registrar advertencia si algún dato es inválido
+                    console.warn('Uno de los objetos a comparar es inválido:', current.data, current.next.data);
                 }
+                // Avanzar al siguiente nodo
                 current = current.next;
             }
-            end = current; 
-        } while (swapped);
+    
+            // Actualizar `end` a la última posición comparada
+            end = current;
+        } while (swapped); // Repetir mientras haya intercambios
+    
+        console.log('Bubble Sort finalizado.');
     }
-    
-    
+       
 
 
     mergeSort() {
@@ -81,21 +101,33 @@ export class LinkedList {
         const merge = (l1, l2) => {
             let dummyHead = new Node(null);
             let current = dummyHead;
-
+        
             while (l1 && l2) {
                 numIterations++;
-                if (l1.data.business <= l2.data.business) {
-                    current.next = l1;
-                    l1 = l1.next;
+                if (l1.data && l2.data) {
+                    if (l1.data.business <= l2.data.business) {
+                        current.next = l1;
+                        l1 = l1.next;
+                    } else {
+                        current.next = l2;
+                        l2 = l2.next;
+                    }
+                    current = current.next;
                 } else {
-                    current.next = l2;
-                    l2 = l2.next;
+                    // Manejo de datos nulos
+                    if (!l1.data) {
+                        current.next = l2;
+                        break;
+                    }
+                    if (!l2.data) {
+                        current.next = l1;
+                        break;
+                    }
                 }
-                current = current.next;
             }
-
+        
             current.next = l1 ? l1 : l2;
-
+        
             return dummyHead.next;
         };
 
@@ -133,76 +165,95 @@ export class LinkedList {
 
     radixSort() {
         let numIterations = 0;
-        let max = this.getMax();
-        for (let exp = 1; Math.floor(max / exp) > 0; exp *= 36) {
+        const max = this.getMax();
+        let exp = 1; // El exponente inicial para la posición del dígito
+    
+        // Recorre todas las posiciones de dígitos (en base 36)
+        while (Math.floor(max / exp) > 0) {
             numIterations++;
             this.countingSort(exp);
+            exp *= 36; // Para manejar la base 36
         }
+    
         console.log("Número de iteraciones en radixSort (LinkedList):", numIterations);
     }
-
+    
+    
     getMax() {
         let numIterations = 0;
         let max = 0;
         let current = this.head;
+    
         while (current !== null) {
             numIterations++;
             if (current.data && current.data.business) {
-                let num = parseInt(current.data.business, 36);
+                const num = parseInt(current.data.business, 36);
                 if (num > max) {
                     max = num;
                 }
             }
             current = current.next;
         }
+    
         console.log("Número de iteraciones en getMax (LinkedList):", numIterations);
         return max;
     }
-
+    
+    
+    
     countingSort(exp) {
         let numIterations = 0;
-        let output = new Array(this.size()).fill(null);
+        const size = this.size(); // Tamaño de la lista enlazada
+        let output = new Array(size).fill(null);
         let count = new Array(36).fill(0);
-
+        
+        // Cuenta la frecuencia de cada dígito en la base 36
         let current = this.head;
         while (current !== null) {
             numIterations++;
             if (current.data && current.data.business) {
-                let num = parseInt(current.data.business, 36);
-                let digit = Math.floor(num / exp) % 36;
+                const num = parseInt(current.data.business, 36);
+                const digit = Math.floor(num / exp) % 36;
                 count[digit]++;
             }
             current = current.next;
         }
-
+        
+        // Acumula las frecuencias
         for (let i = 1; i < 36; i++) {
             numIterations++;
             count[i] += count[i - 1];
         }
-
+        
+        // Ordena los elementos basados en el dígito actual
         current = this.head;
         while (current !== null) {
             numIterations++;
             if (current.data && current.data.business) {
-                let num = parseInt(current.data.business, 36);
-                let digit = Math.floor(num / exp) % 36;
+                const num = parseInt(current.data.business, 36);
+                const digit = Math.floor(num / exp) % 36;
                 output[count[digit] - 1] = current.data;
                 count[digit]--;
             }
             current = current.next;
         }
-
+        
+        // Copia los elementos ordenados de nuevo a la lista enlazada
         current = this.head;
         let i = 0;
         while (current !== null) {
-            current.data = output[i];
-            i++;
+            if (i < size) { // Verifica el límite para evitar errores
+                current.data = output[i];
+                i++;
+            }
             current = current.next;
         }
-
+        
         console.log("Número de iteraciones en countingSort (LinkedList):", numIterations);
     }
-
+    
+    
+    
     size() {
         let count = 0;
         let current = this.head;

@@ -4,16 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Directory</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>Business Directory</h1>
-    <input type="text" id="search" placeholder="Buscar empresa...">
-    <button onclick="searchBusiness()">Buscar</button>
-    <button id="sortBubble">Ordenar por Bubble Sort</button>
-    <button id="sortMerge">Ordenar por Merge Sort</button>
-    <button id="sortRadix">Ordenar por Radix Sort</button>
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Buscar empresa...">
+        <button onclick="searchBusiness()">Buscar</button>
+    </div>
+    <div class="sort-buttons">
+        <button id="sortBubble">Ordenar por Bubble Sort</button>
+        <button id="sortMerge">Ordenar por Merge Sort</button>
+        <button id="sortRadix">Ordenar por Radix Sort</button>
+    </div>
     <div id="results"></div>
     <div id="timingResults"></div>
+
+    <h2>Gráficos de Tiempos de Ordenamiento</h2>
+    <div class="chart-container">
+        <canvas id="arrayChart" width="400" height="200"></canvas>
+        <canvas id="linkedListChart" width="400" height="200"></canvas>
+    </div>
 
     <script type="module" src="controllers/Array.js"></script>
     <script type="module" src="controllers/LinkedList.js"></script>
