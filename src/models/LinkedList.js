@@ -23,17 +23,6 @@ export class LinkedList {
         }
     }
 
-    findByBusiness(businessId) {
-        let current = this.head;
-        while (current !== null) {
-            if (current.data.business === businessId) {
-                return current.data;
-            }
-            current = current.next;
-        }
-        return null;
-    }
-
     toArray() {
         const array = [];
         let current = this.head;
@@ -45,40 +34,34 @@ export class LinkedList {
     }
 
     bubbleSort() {
+        if (!this.head || !this.head.next) {
+            return;
+        }
+    
         let swapped;
-        let current;
         let end = null;
     
-        // Repetir mientras haya intercambios
         do {
             swapped = false;
-            current = this.head;
+            let current = this.head;
     
-            // Iterar sobre la lista hasta el nodo `end`
             while (current.next !== end) {
-                // Verificar si ambos nodos tienen datos válidos y la propiedad `business`
                 if (current.data && current.next.data &&
                     current.data.business && current.next.data.business) {
     
-                    // Comparar y realizar intercambio si es necesario
                     if (current.data.business > current.next.data.business) {
-                        // Intercambiar los datos de los nodos
                         const temp = current.data;
                         current.data = current.next.data;
                         current.next.data = temp;
                         swapped = true;
                     }
                 } else {
-                    // Registrar advertencia si algún dato es inválido
                     console.warn('Uno de los objetos a comparar es inválido:', current.data, current.next.data);
                 }
-                // Avanzar al siguiente nodo
                 current = current.next;
             }
-    
-            // Actualizar `end` a la última posición comparada
             end = current;
-        } while (swapped); // Repetir mientras haya intercambios
+        } while (swapped);
     
         console.log('Bubble Sort finalizado.');
     }

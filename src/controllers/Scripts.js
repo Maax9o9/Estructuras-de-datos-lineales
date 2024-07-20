@@ -1,6 +1,6 @@
-import { Business } from './Business.js';
-import { bubbleSortArray, mergeSort, radixSort } from './Array.js';
-import { LinkedList } from './LinkedList.js';
+import { Business } from '../models/Business.js';
+import { bubbleSortArray, mergeSort, radixSort } from '../models/Array.js';
+import { LinkedList } from '../models/LinkedList.js';
 
 document.addEventListener("DOMContentLoaded", function() {
     const searchInput = document.getElementById('searchId');
@@ -21,9 +21,12 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
+    // Botones de ordenación
     const sortBubbleButton = document.getElementById('sortBubble');
     if (sortBubbleButton) {
         sortBubbleButton.addEventListener('click', function() {
+            console.log('Botón de Bubble Sort clickeado');
+            // Lógica para Bubble Sort
         });
     } else {
         console.error('Botón de ordenación por Bubble Sort no encontrado.');
@@ -32,6 +35,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const sortMergeButton = document.getElementById('sortMerge');
     if (sortMergeButton) {
         sortMergeButton.addEventListener('click', function() {
+            console.log('Botón de Merge Sort clickeado');
+            // Lógica para Merge Sort
         });
     } else {
         console.error('Botón de ordenación por Merge Sort no encontrado.');
@@ -40,34 +45,49 @@ document.addEventListener("DOMContentLoaded", function() {
     const sortRadixButton = document.getElementById('sortRadix');
     if (sortRadixButton) {
         sortRadixButton.addEventListener('click', function() {
+            console.log('Botón de Radix Sort clickeado');
+            // Lógica para Radix Sort
         });
     } else {
         console.error('Botón de ordenación por Radix Sort no encontrado.');
     }
 
+    // Campo de búsqueda
     const searchInput = document.getElementById('searchId');
     if (searchInput) {
         searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            console.log('Término de búsqueda:', searchTerm);
+            const filteredBusinesses = businesses.filter(business => 
+                business.business.toLowerCase().includes(searchTerm)
+            );
+            displayBusinesses(filteredBusinesses);
         });
     } else {
         console.error('Campo de búsqueda no encontrado.');
     }
 
-    const searchByIdButton = document.getElementById('searchById');
-    if (searchByIdButton) {
-        searchByIdButton.addEventListener('click', function() {
+    // Botón de búsqueda por ID
+    const searchButton = document.getElementById('searchButton');
+    if (searchButton) {
+        searchButton.addEventListener('click', function() {
+            console.log('Botón de búsqueda clickeado');
+            // Lógica para búsqueda por ID
         });
     } else {
         console.error('Botón de búsqueda por ID no encontrado.');
     }
+
+    // Cargar dataset
     loadDataset();
 });
+
 
 let businesses = [];
 let linkedList = new LinkedList();
 
 function loadDataset() {
-    fetch('models/bussines.json')
+    fetch('/bussines.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
